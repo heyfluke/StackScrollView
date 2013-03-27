@@ -57,7 +57,6 @@
 
         UIView* footerView =  [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 1)];
 		_tableView.tableFooterView = footerView;
-        [footerView release];
         
 		[_tableView setAutoresizingMask:UIViewAutoresizingFlexibleHeight];
 		[self.view addSubview:_tableView];
@@ -105,12 +104,16 @@
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
     // Configure the cell...
-	cell.textLabel.text = [NSString stringWithFormat:@"Data %d", indexPath.row];
-	cell.textLabel.textColor = [UIColor blackColor];
+    if (indexPath.row == 4) {
+        cell.textLabel.text = [NSString stringWithFormat:@"Close all"];
+    } else {
+        cell.textLabel.text = [NSString stringWithFormat:@"Data %d", indexPath.row];
+        cell.textLabel.textColor = [UIColor blackColor];
+    }
 
     return cell;
 }
@@ -120,9 +123,13 @@
 #pragma mark Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    DataViewController *dataViewController = [[DataViewController alloc] initWithFrame:CGRectMake(0, 0, 477, self.view.frame.size.height)];
-	[[StackScrollViewAppDelegate instance].rootViewController.stackScrollViewController addViewInSlider:dataViewController invokeByController:self isStackStartView:FALSE];
-	[dataViewController release];
+    if (indexPath.row == 4) {
+        NSLog(@"indexPath.row == 4, remove");
+        [[StackScrollViewAppDelegate instance].rootViewController.stackScrollViewController removeAllView];
+    } else {
+        DataViewController *dataViewController = [[DataViewController alloc] initWithFrame:CGRectMake(0, 0, 477, self.view.frame.size.height)];
+        [[StackScrollViewAppDelegate instance].rootViewController.stackScrollViewController addViewInSlider:dataViewController invokeByController:self isStackStartView:FALSE];
+    }
 }
 
 
@@ -137,9 +144,6 @@
 }
 
 
-- (void)dealloc {
-    [super dealloc];
-}
 
 
 @end
