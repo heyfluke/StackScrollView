@@ -1,3 +1,7 @@
+# Changes by heyfluke
+1. change to ARC.
+2. add close view function in DataViewController.
+
 StackScrollView Like Twitter iPad App
 ============================================================
 
